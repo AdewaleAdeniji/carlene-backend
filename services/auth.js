@@ -2,7 +2,8 @@ const configs = require("../helpers/configs");
 const apiConfig = configs.config;
 var axios = require("axios");
 
-export const verifyToken = async (token) => {
+console.log(apiConfig);
+exports.verifyToken = async (token) => {
   var config = {
     method: "get",
     url: apiConfig.USER_SERVICE_URL + "/token",
@@ -11,6 +12,12 @@ export const verifyToken = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   };
+  if(!apiConfig.USE_AUTH_SERVICE){
+    return {
+      success: true,
+      ...JSON.parse(apiConfig.USER_OBJECT),
+    };
+  }
   try {
     const req = await axios(config);
     return {
@@ -18,14 +25,14 @@ export const verifyToken = async (token) => {
       ...req.data,
     };
   } catch (err) {
-    console.log(err?.response);
+    console.log(err?.code);
     return {
       success: false,
       message: err?.response?.data?.message || "Unauthorized User ",
     };
   }
 };
-export const getUser = async (userID) => {
+exports.getUser = async (userID) => {
   var config = {
     method: "get",
     url: apiConfig.USER_SERVICE_URL + "/auth/user/" + userID,
@@ -33,6 +40,12 @@ export const getUser = async (userID) => {
       appKey: apiConfig.USER_SERVICE_API_KEY,
     },
   };
+  if(!apiConfig.USE_AUTH_SERVICE){
+    return {
+      success: true,
+      ...apiConfig.USER_OBJECT,
+    };
+  }
   try {
     const req = await axios(config);
     return {
