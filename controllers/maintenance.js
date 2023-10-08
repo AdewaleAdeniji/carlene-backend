@@ -14,6 +14,7 @@ exports.MaintenanceTypes = {
   500: "STEERING_OIL_CHANGE",
   600: "GEAR_OIL_CHANGE",
   700: "TYRE_INFLATION",
+  800: "FUEL"
 };
 exports.MaintenanceController = WrapHandler((req, res) => {});
 exports.CreateMaintenanceController = WrapHandler(async (req, res) => {
@@ -52,8 +53,16 @@ exports.GetCarMaintenanceController = WrapHandler(async (req, res) => {
   if (!car) return res.status(400).send({ message: "Car not found" });
   // get all maintenance with carID
   const maintenances = await MaintenanceModel.find({ carID: carId });
-  return res.send(maintenances);
+  return res.send({ data: maintenances });
+});
+exports.GetCarMaintenanceByMaintenanceIdController = WrapHandler(async (req, res) => {
+  const { carId, maintenanceId } = req.params;
+  const car = await CarModel.findOne({ carID: carId, carOwnerID: req.userID });
+  if (!car) return res.status(400).send({ message: "Car not found" });
+  // get all maintenance with carID
+  const maintenances = await MaintenanceModel.find({ carID: carId, maintenanceId });
+  return res.send({ data: maintenances });
 });
 exports.MaintenanceTypesController = (req, res) => {
-  return res.send({ types: this.MaintenanceTypes });
+  return res.send({ data: this.MaintenanceTypes });
 };

@@ -27,11 +27,11 @@ exports.GetCar = WrapHandler(async (req, res) => {
 
   const car = await CarModel.findOne({
     carID,
-    userID,
+    carOwnerID: userID,
   });
   if (!car) return res.status(400).send({ message: "Car not found" });
 
-  return res.send(car);
+  return res.send({ data: car });
 });
 exports.UpdateCar = WrapHandler(async (req, res) => {
   const userID = req.userID;
@@ -39,7 +39,7 @@ exports.UpdateCar = WrapHandler(async (req, res) => {
 
   const car = await CarModel.findOne({
     carID,
-    userID,
+    carOwnerID: userID,
   });
   if (!car) return res.status(400).send({ message: "Car not found" });
   const update = await CarModel.findByIdAndUpdate(car._id, req.body);
@@ -50,6 +50,6 @@ exports.UpdateCar = WrapHandler(async (req, res) => {
 exports.GetUserCars = WrapHandler(async (req, res) => {
   const userID = req.userID;
   const cars = await CarModel.find({ carOwnerID: userID });
-  return res.send(cars);
+  return res.send({ data: cars });
 });
 exports.TemplatedController = WrapHandler(async (req, res) => {});

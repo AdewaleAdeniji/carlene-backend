@@ -25,7 +25,6 @@ exports.verifyToken = async (token) => {
       ...req.data,
     };
   } catch (err) {
-    console.log(err?.code);
     return {
       success: false,
       message: err?.response?.data?.message || "Unauthorized User ",
