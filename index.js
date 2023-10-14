@@ -9,6 +9,7 @@ const {
   GetCar,
   UpdateCar,
   GetUserCars,
+  GetCarDetails,
 } = require("./controllers/cars");
 const {
   MaintenanceTypesController,
@@ -32,6 +33,7 @@ app.get("/user/profile", validateUser, UserProfile);
 // car service
 app.post("/user/cars/add", validateUser, AddCarToUser);
 app.get("/user/car/:carID", validateUser, GetCar);
+app.get("/user/car/:carID/details", validateUser, GetCarDetails);
 app.get("/user/cars", validateUser, GetUserCars);
 app.put("/user/car/:carID", validateUser, UpdateCar);
 

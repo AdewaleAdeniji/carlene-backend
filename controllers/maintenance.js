@@ -61,7 +61,7 @@ exports.GetCarMaintenanceByMaintenanceIdController = WrapHandler(async (req, res
   if (!car) return res.status(400).send({ message: "Car not found" });
   // get all maintenance with carID
   const maintenances = await MaintenanceModel.find({ carID: carId, maintenanceId });
-  return res.send({ data: maintenances });
+  return res.send({ data: {car , maintenances, types: this.MaintenanceTypes } });
 });
 exports.MaintenanceTypesController = (req, res) => {
   return res.send({ data: this.MaintenanceTypes });

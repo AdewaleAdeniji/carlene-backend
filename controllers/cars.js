@@ -4,14 +4,15 @@ const {
   generateID,
 } = require("../helpers/utils");
 const CarModel = require("../models/Cars");
+const MaintenanceModel = require("../models/Maintenance");
+const { MaintenanceTypes } = require("./maintenance");
 
 exports.AddCarToUser = WrapHandler(async (req, res) => {
   const body = req?.body;
   const val = validateRequest(body, [
     "carMake",
     "carYear",
-    "carModel",
-    "tyreCount",
+    "carModel"
   ]);
   if (val) return res.status(400).send(val);
   // create the car and assign it to the user
@@ -32,6 +33,24 @@ exports.GetCar = WrapHandler(async (req, res) => {
   if (!car) return res.status(400).send({ message: "Car not found" });
 
   return res.send({ data: car });
+});
+exports.GetCarDetails = WrapHandler(async (req, res) => {
+  const userID = req.userID;
+  const carID = req.params.carID;
+
+  const car = await CarModel.findOne({
+    carID,
+    carOwnerID: userID,
+  });
+  const response = {
+    car,
+    maintenances: [],
+    types: MaintenanceTypes,
+    currency: "NGN"
+  }
+  if (!car) return res.status(400).send({ message: "Car not found" });
+  response.maintenances = await MaintenanceModel.find({ carID });
+  return res.send({ data: response });
 });
 exports.UpdateCar = WrapHandler(async (req, res) => {
   const userID = req.userID;
