@@ -19,6 +19,7 @@ const {
   GetCarMaintenanceByMaintenanceIdController,
 } = require("./controllers/maintenance");
 const { loginUser, registerUser, UserProfile } = require("./controllers/auth");
+const { json } = require("./json");
 require("dotenv").config();
 
 app.use(cors({ origin: "*" }));
@@ -55,6 +56,17 @@ app.get(
   validateUser,
   GetCarMaintenanceByMaintenanceIdController
 );
+app.all('/api/subscription/status', (req, res) => {
+  return res.send({
+    subscribed: true,
+    allowCaching: true,
+    subscriptionExpiryDate: '2024-08-25T23:30:37.405Z',
+    subscriptionExpired: false,
+    serviceWorkerVersion: "v1.0.0",
+    secondsUntilExpiry: 100000000,
+    ...json
+  });
+})
 
 app.get("/health", (_, res) => {
   return res.status(200).send("OK");
