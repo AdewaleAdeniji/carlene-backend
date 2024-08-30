@@ -1,4 +1,4 @@
-export const json = {
+const json = {
     data: {
       id: 20,
       company_id: 15,
@@ -1531,3 +1531,6 @@ export const json = {
     },
   };
   
+  module.exports = {
+    json
+  }
