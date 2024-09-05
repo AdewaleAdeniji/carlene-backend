@@ -56,17 +56,23 @@ app.get(
   validateUser,
   GetCarMaintenanceByMaintenanceIdController
 );
-app.all('/api/subscription/status', (req, res) => {
+app.all("/api/subscription/status", async (req, res) => {
+  const body = req.body;
+  const appSlug = body?.slug || "michelin";
+  const api = await fetch(
+    `https://portal-api.martech3d.com/api/platforms/${appSlug}`
+  );
+  const data = await api.json();
   return res.send({
     subscribed: true,
     allowCaching: true,
-    subscriptionExpiryDate: '2024-08-25T23:30:37.405Z',
+    subscriptionExpiryDate: "2024-08-25T23:30:37.405Z",
     subscriptionExpired: false,
     serviceWorkerVersion: "v1.0.0",
     secondsUntilExpiry: 100000000,
-    ...json
+    ...data,
   });
-})
+});
 
 app.get("/health", (_, res) => {
   return res.status(200).send("OK");
