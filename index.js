@@ -25,7 +25,36 @@ require("dotenv").config();
 app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+let datajson = [
+  {
+    fingerprint: "i3je3oi4",
+    metadata:
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+    lastActive: "2024-09-05T06:56:00.000Z",
+    activeStatus: true,
+  },
+  {
+    fingerprint: "i3je3444oi4",
+    metadata:
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome",
+    lastActive: "2024-09-02T18:24:00.000Z",
+    activeStatus: true,
+  },
+  {
+    fingerprint: "i3je34oi4",
+    metadata:
+      "Mozilla/5.0 Android 10 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/",
+    lastActive: "2024-09-04T09:16:00.000Z",
+    activeStatus: false,
+  },
+  {
+    fingerprint: "dd",
+    metadata:
+      "Mozilla/5.0 Android 10 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/",
+    lastActive: "2024-09-02T15:00:00.000Z",
+    activeStatus: false,
+  },
+];
 // auth service
 app.post("/auth/login", loginUser);
 app.post("/auth/register", registerUser);
@@ -66,11 +95,18 @@ app.all("/api/subscription/status", async (req, res) => {
   return res.send({
     subscribed: true,
     allowCaching: true,
-    subscriptionExpiryDate: "2024-08-25T23:30:37.405Z",
+    subscriptionExpiryDate: "2024-09-25T23:30:37.405Z",
     subscriptionExpired: false,
     serviceWorkerVersion: "v1.0.0",
+    updateVersion: 6.55,
     secondsUntilExpiry: 100000000,
     ...data,
+  });
+});
+
+app.get("/api/devices", async (req, res) => {
+  return res.send({
+    data: datajson,
   });
 });
 
@@ -94,5 +130,5 @@ mongoose
   .catch(() => console.log("error occured connecting to mongodb"));
 
 app.listen(process.env.PORT || 3003, () => {
-  console.log("Server is running on port 3001");
+  console.log(`Server is running on port ${process.env.PORT || 3003}`);
 });
